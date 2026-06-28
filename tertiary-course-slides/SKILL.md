@@ -23,7 +23,7 @@ Generate a professional 3-day course deck with `python-pptx`. Template: `make_sl
 ### Admin slides use card/icon designs (white theme), not plain bullets
 Helper functions in `make_slides.py` (all blue `#1F6FEB` accents on white, with bundled white-glyph icons in `assets/icons/` drawn on blue circles via `idisc()`):
 - `about_trainer_blank()` — dark name card with `[ Trainer Name ]` / `[ Title / Role ]` placeholders + 4 icon rows (Qualifications / Expertise / Experience / Contact-Profile) with **blank fill-in lines**.
-- `about_trainer_filled(name, role, rows)` — same layout, filled in. **Include BOTH a blank and a filled About-the-Trainer slide.**
+- `about_trainer_filled(name, role, rows, links=None)` — same layout, filled in. **Include BOTH a blank and a filled About-the-Trainer slide.** Pass `links=[("ic_linkedin","linkedin.com/in/…","https://…"),("ic_github","github.com/…","https://…")]` to add **clickable** LinkedIn/GitHub profile rows with icons.
 - `digital_attendance()` — bullets + big "Minimum 75% attendance required" callout card.
 - `icon_cards(title, kicker, cards, sub)` — 3 icon cards (e.g. Let's Know Each Other).
 - `grid_cards(title, kicker, cards)` — 6-card 2×3 grid (Ground Rules, Briefing for Assessment).

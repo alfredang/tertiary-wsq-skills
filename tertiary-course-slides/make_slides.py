@@ -196,14 +196,21 @@ def idisc(s,x,y,d,icon,color=BLUE):
     p=f"{ICONS}/{icon}.png"
     if _os.path.exists(p): s.shapes.add_picture(p,x+pad,y+pad,width=d-2*pad,height=d-2*pad)
 
-def about_trainer(name=None,role=None,rows=None,blank=False):
+def link_run(s,x,y,w,h,text,url):
+    tb=s.shapes.add_textbox(x,y,w,h); tf=tb.text_frame; tf.word_wrap=False; tf.vertical_anchor=MIDDLE
+    tf.margin_left=tf.margin_right=tf.margin_top=tf.margin_bottom=Pt(0)
+    r=tf.paragraphs[0].add_run(); r.text=text
+    r.font.size=Pt(13); r.font.color.rgb=BLUE; r.font.underline=True; r.font.name=FONT
+    r.hyperlink.address=url
+def about_trainer(name=None,role=None,rows=None,blank=False,links=None):
     s=slide(); head(s,"About the Trainer","YOUR TRAINER")
     cx,cy,cw,ch=Inches(0.8),Inches(1.95),Inches(3.7),Inches(4.0)
     rrect(s,cx,cy,cw,ch,INK,line=None)
     d=Inches(1.25); idisc(s,cx+(cw-d)//2,cy+Inches(0.45),d,"ic_grad",BLUE)
     txt(s,cx,cy+Inches(2.0),cw,Inches(0.55),[[(name or "[ Trainer Name ]",20,WHITE,True)]],align=CENTER)
     txt(s,cx,cy+Inches(2.55),cw,Inches(0.45),[[(role or "[ Title / Role ]",14,BLUE,True)]],align=CENTER)
-    rx,ry,gap,dd=Inches(4.85),Inches(2.0),Inches(1.0),Inches(0.7)
+    gap=Inches(0.82) if links else Inches(1.0)
+    rx,ry,dd=Inches(4.85),Inches(2.0),Inches(0.7)
     for icon,label,desc in rows:
         idisc(s,rx,ry,dd,icon,BLUE)
         if blank:
@@ -213,12 +220,17 @@ def about_trainer(name=None,role=None,rows=None,blank=False):
             txt(s,rx+dd+Inches(0.3),ry-Inches(0.05),Inches(7.5),dd+Inches(0.1),
                 [[(label,15,INK,True)],[(desc,13,GREY,False)]],anchor=MIDDLE,space=2)
         ry+=gap
+    if links:  # clickable icon + hyperlinked profile URLs (e.g. LinkedIn, GitHub)
+        ly,dd2=Inches(5.45),Inches(0.56)
+        for (icon,text,url),lx in zip(links,[Inches(4.85),Inches(8.1)]):
+            idisc(s,lx,ly,dd2,icon,BLUE)
+            link_run(s,lx+dd2+Inches(0.24),ly-Inches(0.02),Inches(3.0),dd2+Inches(0.04),text,url)
     footer(s)
 def about_trainer_blank():
     about_trainer(blank=True,rows=[("ic_laptop","Qualifications:",""),("ic_person","Expertise:",""),
         ("ic_brief","Experience:",""),("ic_link","Contact / Profile:","")])
-def about_trainer_filled(name,role,rows):
-    about_trainer(name=name,role=role,rows=rows)
+def about_trainer_filled(name,role,rows,links=None):
+    about_trainer(name=name,role=role,rows=rows,links=links)
 
 def digital_attendance():
     s=slide(); head(s,"Digital Attendance (Mandatory)","TRAQOM · SSG DIGITAL ATTENDANCE")
@@ -376,7 +388,9 @@ about_trainer_filled("Dr. Alfred Ang","AI Trainer & Engineer",[
  ("ic_grad","Role","Principal Trainer at Tertiary Infotech Academy Pte. Ltd."),
  ("ic_laptop","Qualifications","PhD; specialises in AI, automation and software engineering."),
  ("ic_person","Expertise","Designs & delivers WSQ courses on AI agents, automation (n8n) & app development."),
- ("ic_brief","Experience","Founder & lead instructor at Tertiary Infotech / Tertiary Courses.")])
+ ("ic_brief","Experience","Founder & lead instructor at Tertiary Infotech / Tertiary Courses.")],
+ links=[("ic_linkedin","linkedin.com/in/angchewhoe","https://www.linkedin.com/in/angchewhoe"),
+        ("ic_github","github.com/alfredang","https://github.com/alfredang")])
 icon_cards("Let's Know Each Other","ICE-BREAKER",[
  ("ic_person2","Your role","Your name and organisation / role."),
  ("ic_code","Your experience","Your experience with automation or AI tools (if any)."),
